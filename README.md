@@ -1,13 +1,13 @@
 # Study Tracker - Standalone Version
 
-A standalone web application to monitor your daily study time, plan your day, view weekly reports, and use a Pomodoro timer. **No Node.js or build tools required!**
+A standalone web application to monitor your daily study time, plan your day, view weekly reports, and use a Pomodoro timer. No Node.js or build tools required!
 
 ## Features
 
-- 🍅 **Pomodoro Timer**: Focus timer with customizable work/break durations
-- 📊 **Daily Study Tracker**: Log and monitor your daily study sessions
-- 📝 **Daily Planning**: Plan your day with tasks and time estimates
-- 📈 **Weekly Report**: View statistics and visualizations of your study habits
+- 🍅 Pomodoro Timer: Focus timer with customizable work/break durations
+- 📊 Daily Study Tracker: Log and monitor your daily study sessions
+- 📝 Daily Planning: Plan your day with tasks and time estimates
+- 📈 Weekly Report: View statistics and visualizations of your study habits
 
 ## Getting Started
 
@@ -72,6 +72,5 @@ This standalone version provides the same functionality as the React version but
 - Smaller file size
 
 ## License
-
-MIT
+- Vivek Maurya
 
