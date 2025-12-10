@@ -8,7 +8,6 @@ A standalone web application to monitor your daily study time, plan your day, vi
 - 📊 Daily Study Tracker: Log and monitor your daily study sessions
 - 📝 Daily Planning: Plan your day with tasks and time estimates
 - 📈 Weekly Report: View statistics and visualizations of your study habits
-- Monthly Calendar: See all your plans and events along with integration with Google calendar
 
 ## Getting Started
 
@@ -74,4 +73,3 @@ This standalone version provides the same functionality as the React version but
 
 ## License
 - Vivek Maurya
-
