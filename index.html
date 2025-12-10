@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Tracker - Monitor Your Learning Journey</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Study Tracker</h1>
+            <p>Monitor your learning journey and stay focused</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="pomodoro">⏱️ Pomodoro</button>
+            <button class="tab-btn" data-tab="plan">📝 Daily Plan</button>
+            <button class="tab-btn" data-tab="actual">✅ Actual Work</button>
+            <button class="tab-btn" data-tab="report">📈 Weekly Report</button>
+            <button class="tab-btn" data-tab="calendar">📅 Monthly Calendar</button>
+        </nav>
+
+        <main>
+            <!-- Pomodoro Timer -->
+            <section id="pomodoro" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Pomodoro Timer</h2>
+                        <button id="switch-duration" class="switch-btn">Switch to 50min</button>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Select Activity (from today's plan)</label>
+                        <select id="pomodoro-activity" style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; background: white;">
+                            <option value="">-- Select Activity --</option>
+                        </select>
+                        <div id="selected-activity-display" style="margin-top: 0.5rem; padding: 0.75rem; background: #f0fdf4; border-radius: 0.5rem; display: none;">
+                            <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Selected:</div>
+                            <div id="selected-activity-text" style="font-weight: 500; color: #10b981;"></div>
+                        </div>
+                    </div>
+                    <div class="timer-container">
+                        <div class="timer-circle">
+                            <svg class="timer-svg" viewBox="0 0 256 256">
+                                <circle class="timer-bg" cx="128" cy="128" r="120"></circle>
+                                <circle class="timer-progress" id="timer-progress" cx="128" cy="128" r="120"></circle>
+                            </svg>
+                            <div class="timer-display">
+                                <div id="timer-time" class="timer-time">25:00</div>
+                                <div id="timer-label" class="timer-label">Focus Time</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="timer-start" class="btn btn-primary">Start</button>
+                        <button id="timer-pause" class="btn btn-yellow" style="display: none;">Pause</button>
+                        <button id="timer-resume" class="btn btn-green" style="display: none;">Resume</button>
+                        <button id="timer-reset" class="btn btn-red" style="display: none;">Reset</button>
+                        <button id="timer-skip" class="btn btn-gray" style="display: none;">Skip Break</button>
+                    </div>
+                    <div class="timer-info">
+                        <p id="session-info">Session 1 • 0 completed today</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Daily Plan -->
+            <section id="plan" class="tab-content">
+                <div class="card">
+                    <h2>Daily Plan</h2>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Select Date</label>
+                        <input type="date" id="plan-date-selector" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; width: 100%; max-width: 300px;">
+                        <div class="date-display" id="plan-date" style="font-weight: 600; color: #0284c7; background: #eff6ff; padding: 0.5rem 1rem; border-radius: 0.5rem; display: inline-block; margin-top: 0.5rem;"></div>
+                    </div>
+                    
+                    <!-- Focus Field -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Focus</label>
+                        <input type="text" id="plan-focus" placeholder="e.g., Main+Job">
+                    </div>
+
+                    <!-- Time Slots -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Time Slots</h3>
+                        
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Slot 1 (5AM - 8AM)</label>
+                            <input type="text" id="plan-slot1" placeholder="e.g., Socio Reading + Revision">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Slot 2 (9AM - 12PM)</label>
+                            <input type="text" id="plan-slot2" placeholder="e.g., Costing + Companies Act">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Slot 3 (2PM - 5PM)</label>
+                            <input type="text" id="plan-slot3" placeholder="e.g., AWS Project using Jenkins">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Slot 4 (7PM - 9PM)</label>
+                            <input type="text" id="plan-slot4" placeholder="e.g., NEWSPAPER + Revision + Plan">
+                        </div>
+                    </div>
+
+                    <!-- Timing Display -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label>Total Timing</label>
+                        <div id="plan-timing" class="timing-display">00:00</div>
+                        <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem; text-align: center;">
+                            Total plan: 14 hours when all slots filled (Slot 1: 3h, Slot 2: 3h, Slot 3: 3h, Slot 4: 2h + 3h buffer)
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Comments</label>
+                        <textarea id="plan-comments" rows="3" placeholder="e.g., Done: costing, website at versal. Not Done: AWS, Socio"></textarea>
+                    </div>
+
+                    <!-- Task Progress -->
+                    <div class="progress-section" style="margin-bottom: 1.5rem;">
+                        <div class="progress-header">
+                            <span>Task Progress</span>
+                            <span id="progress-text">0 / 0 tasks</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Tasks -->
+                    <div class="add-task">
+                        <h3 style="font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 1rem;">Additional Tasks</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Task</label>
+                                <input type="text" id="task-text" placeholder="e.g., Complete math homework">
+                            </div>
+                            <div class="form-group">
+                                <label>Time Estimate (minutes)</label>
+                                <input type="number" id="task-time" placeholder="e.g., 30">
+                            </div>
+                        </div>
+                        <button id="add-task-btn" class="btn btn-primary">Add Task</button>
+                    </div>
+                    <div class="tasks-list" style="margin-top: 1.5rem;">
+                        <h3>Additional Tasks</h3>
+                        <div id="tasks-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Weekly Report -->
+            <section id="report" class="tab-content">
+                <div class="card">
+                    <h2>Weekly Report</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card stat-primary">
+                            <div class="stat-label">Total Study Time</div>
+                            <div class="stat-value" id="weekly-total">0m</div>
+                            <div class="stat-detail" id="weekly-total-detail"></div>
+                        </div>
+                        <div class="stat-card stat-green">
+                            <div class="stat-label">Sessions</div>
+                            <div class="stat-value" id="weekly-sessions">0</div>
+                            <div class="stat-detail">This week</div>
+                        </div>
+                        <div class="stat-card stat-purple">
+                            <div class="stat-label">Daily Average</div>
+                            <div class="stat-value" id="weekly-average">0m</div>
+                            <div class="stat-detail">Per day</div>
+                        </div>
+                    </div>
+                    <div class="chart-section">
+                        <h3>Daily Breakdown</h3>
+                        <div id="chart-container"></div>
+                    </div>
+                    <div class="chart-section" style="margin-top: 2rem;">
+                        <h3>Daily Timings & Average Study Hours</h3>
+                        <div id="timing-chart-container"></div>
+                        <div style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">
+                            Average: <span id="average-hours-display" style="font-weight: 600; color: #0284c7;">0 hours</span>
+                        </div>
+                    </div>
+                    <div class="days-list" style="margin-top: 2rem;">
+                        <h3>Day by Day</h3>
+                        <div id="days-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actual Work -->
+            <section id="actual" class="tab-content">
+                <div class="card">
+                    <h2>Actual Work Done</h2>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Select Date</label>
+                        <input type="date" id="actual-date-selector" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; width: 100%; max-width: 300px;">
+                        <div class="date-display" id="actual-date" style="font-weight: 600; color: #0284c7; background: #eff6ff; padding: 0.5rem 1rem; border-radius: 0.5rem; display: inline-block; margin-top: 0.5rem;"></div>
+                    </div>
+
+                    <div class="comparison-section" style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Planned vs Actual</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem;">
+                                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Planned</div>
+                                <div id="planned-time" style="font-size: 1.5rem; font-weight: bold; color: #0284c7;">00:00</div>
+                            </div>
+                            <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem;">
+                                <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Actual (Pomodoro)</div>
+                                <div id="actual-time" style="font-size: 1.5rem; font-weight: bold; color: #10b981;">00:00</div>
+                            </div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem;">
+                            <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Difference</div>
+                            <div id="difference-time" style="font-size: 1.25rem; font-weight: bold;">00:00</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Actual Work Against Planned Slots</h3>
+                        <div id="planned-slots-actual"></div>
+                    </div>
+
+                    <div>
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Additional Work Done</h3>
+                        <div class="add-session">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Activity</label>
+                                    <input type="text" id="actual-activity" placeholder="e.g., Completed math homework">
+                                </div>
+                                <div class="form-group">
+                                    <label>Duration (minutes)</label>
+                                    <input type="number" id="actual-duration" placeholder="e.g., 30">
+                                </div>
+                            </div>
+                            <button id="add-actual-btn" class="btn btn-primary">Add Activity</button>
+                        </div>
+                        <div id="actual-activities" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Calendar -->
+            <section id="calendar" class="tab-content">
+                <div class="card">
+                    <h2>Monthly Calendar</h2>
+                    <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Select Month</label>
+                            <input type="month" id="calendar-month-selector" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem;">
+                        </div>
+                        <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                            <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Monthly Average</div>
+                            <div id="monthly-average" style="font-size: 1.5rem; font-weight: bold; color: #0284c7;">0 hours</div>
+                        </div>
+                    </div>
+                    <div id="monthly-calendar-container"></div>
+                    <div class="calendar-legend" style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background: #10b981; border-radius: 4px;"></div>
+                            <span style="font-size: 0.875rem;">Productive (&gt;12h)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background: #f59e0b; border-radius: 4px;"></div>
+                            <span style="font-size: 0.875rem;">Average (6-12h)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background: #ef4444; border-radius: 4px;"></div>
+                            <span style="font-size: 0.875rem;">Poor (&lt;6h)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1rem;">🎂</span>
+                            <span style="font-size: 0.875rem;">Birthday</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1rem;">💍</span>
+                            <span style="font-size: 0.875rem;">Anniversary</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1rem;">🎉</span>
+                            <span style="font-size: 0.875rem;">Holiday</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e5e7eb;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Manage Events</h3>
+                        
+                        <div style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                            <h4 style="font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 1rem;">Add Event</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Event Type</label>
+                                    <select id="event-type" style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem;">
+                                        <option value="birthday">🎂 Birthday</option>
+                                        <option value="anniversary">💍 Anniversary</option>
+                                        <option value="holiday">🎉 Holiday</option>
+                                        <option value="other">📅 Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" id="event-date" style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem;">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label>Event Name / Description</label>
+                                <input type="text" id="event-name" placeholder="e.g., John's Birthday, New Year, Wedding Anniversary" style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem;">
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button id="add-event-btn" class="btn btn-primary">Add Event</button>
+                            </div>
+                            
+                        </div>
+
+                        <!-- Hide whole events list section -->
+                        <div id="events-list-section" style="display: none;">
+                            <h4 style="font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 1rem;">Your Events</h4>
+                            <div id="events-list"></div>
+                        </div>
+
+                            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e5e7eb;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:0.75rem;">
+                                    <h4 style="font-size: 1rem; font-weight: 600; color: #374151; margin: 0;">
+                                        🔄 Auto-Sync Google Calendar
+                                    </h4>
+
+                                    <!-- dropdown to show/hide settings -->
+                                    <select id="auto-sync-visibility"
+                                            style="padding:0.35rem 0.75rem; border-radius:0.5rem; border:1px solid #d1d5db; font-size:0.875rem;">
+                                        <option value="hidden" selected>Show settings ▼</option>
+                                        <option value="visible">Hide settings ▲</option>
+                                    </select>
+                                </div>
+
+                                <!-- Settings card: starts hidden, dropdown controls visibility -->
+                                <div id="auto-sync-settings-card"
+                                    style="display:none; background: #f0fdf4; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #10b981;">
+
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                <input type="checkbox" id="auto-sync-enabled" style="width: 18px; height: 18px; cursor: pointer;">
+                                                <span style="font-weight: 500; color: #1f2937;">Enable Auto-Sync</span>
+                                            </label>
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                            <button id="sync-now-btn" class="btn btn-primary" style="background: #10b981;">Sync Now</button>
+                                            <button id="add-calendar-url-btn" class="btn btn-gray">Add Calendar URL</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Sync Interval (minutes)</label>
+                                        <select id="sync-interval" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; width: 100%; max-width: 200px;">
+                                            <option value="15">Every 15 minutes</option>
+                                            <option value="30" selected>Every 30 minutes</option>
+                                            <option value="60">Every hour</option>
+                                            <option value="120">Every 2 hours</option>
+                                            <option value="360">Every 6 hours</option>
+                                            <option value="1440">Once daily</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="sync-status" style="font-size: 0.875rem; color: #6b7280; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                                        <div>Last sync: <span id="last-sync-time">Never</span></div>
+                                        <div style="margin-top: 0.25rem;">Status: <span id="sync-status-text">Not syncing</span></div>
+                                    </div>
+
+                                    <div id="calendar-urls-list" style="margin-top: 1rem;">
+                                        <div style="font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Connected Calendars:</div>
+                                        <div id="calendar-urls-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
