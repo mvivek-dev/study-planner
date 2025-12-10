@@ -110,6 +110,10 @@ header p {
     color: #0369a1;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .date-display {
     font-size: 0.875rem;
     color: #4b5563;

@@ -1725,76 +1725,99 @@ const exportEvents = () => {
 };
 
 const initMonthlyCalendar = () => {
-    document.getElementById('calendar-month-selector').addEventListener('change', (e) => {
-        loadMonthlyCalendar(e.target.value);
-        const autoSyncVisibility = document.getElementById('auto-sync-visibility');
-        const autoSyncSettingsCard = document.getElementById('auto-sync-settings-card');
-        
-        if (autoSyncVisibility && autoSyncSettingsCard) {
-            // set initial state
-            autoSyncSettingsCard.style.display =
-                autoSyncVisibility.value === 'visible' ? 'block' : 'none';
-        
-            autoSyncVisibility.addEventListener('change', (e) => {
-                autoSyncSettingsCard.style.display =
-                    e.target.value === 'visible' ? 'block' : 'none';
-            });
-        }        
-    });
-    
-    document.getElementById('add-event-btn').addEventListener('click', addEvent);
-    
-    // Auto-sync controls
+    // Month selector
+    const monthSelector = document.getElementById('calendar-month-selector');
+    if (monthSelector) {
+        monthSelector.addEventListener('change', (e) => {
+            loadMonthlyCalendar(e.target.value);
+        });
+    }
+
+    // Add event button (the manual "Add Event" button in Manage Events)
+    const addEventBtn = document.getElementById('add-event-btn');
+    if (addEventBtn) {
+        addEventBtn.addEventListener('click', addEvent);
+    }
+
+    // ---------- DROPDOWN: SHOW / HIDE AUTO-SYNC SETTINGS ----------
+    const visibilitySelect = document.getElementById('auto-sync-visibility');
+    const settingsCard = document.getElementById('auto-sync-settings-card');
+
+    if (visibilitySelect && settingsCard) {
+        const updateVisibility = () => {
+            const show = visibilitySelect.value === 'visible';
+            settingsCard.style.display = show ? 'block' : 'none';
+        };
+
+        // initial state
+        updateVisibility();
+
+        // when user changes dropdown
+        visibilitySelect.addEventListener('change', updateVisibility);
+    }
+
+    // ---------- GOOGLE CALENDAR AUTO-SYNC CONTROLS ----------
     const autoSyncEnabled = document.getElementById('auto-sync-enabled');
     const syncNowBtn = document.getElementById('sync-now-btn');
     const addCalendarUrlBtn = document.getElementById('add-calendar-url-btn');
     const syncIntervalSelect = document.getElementById('sync-interval');
-    
-    // Load sync settings
+
     const settings = storage.getSyncSettings();
-    autoSyncEnabled.checked = settings.enabled;
-    syncIntervalSelect.value = settings.interval || 30;
+
+    if (autoSyncEnabled) {
+        autoSyncEnabled.checked = settings.enabled;
+    }
+    if (syncIntervalSelect) {
+        syncIntervalSelect.value = settings.interval || 30;
+    }
+
     updateLastSyncTime();
     renderCalendarUrls();
-    
-    // Auto-sync toggle
-    autoSyncEnabled.addEventListener('change', (e) => {
-        settings.enabled = e.target.checked;
-        storage.saveSyncSettings(settings);
-        
-        if (settings.enabled) {
-            startAutoSync();
-        } else {
-            stopAutoSync();
-        }
-    });
-    
-    // Sync interval change
-    syncIntervalSelect.addEventListener('change', (e) => {
-        settings.interval = parseInt(e.target.value);
-        storage.saveSyncSettings(settings);
-        
-        if (settings.enabled) {
-            startAutoSync();
-        }
-    });
-    
-    // Manual sync button
-    syncNowBtn.addEventListener('click', () => {
-        syncFromGoogleCalendar(true);
-    });
-    
-    // Add calendar URL button
-    addCalendarUrlBtn.addEventListener('click', addCalendarUrlDialog);
-    
-    // Start auto-sync if enabled
+
+    if (autoSyncEnabled) {
+        autoSyncEnabled.addEventListener('change', (e) => {
+            settings.enabled = e.target.checked;
+            storage.saveSyncSettings(settings);
+
+            if (settings.enabled) {
+                startAutoSync();
+            } else {
+                stopAutoSync();
+            }
+        });
+    }
+
+    if (syncIntervalSelect) {
+        syncIntervalSelect.addEventListener('change', (e) => {
+            settings.interval = parseInt(e.target.value);
+            storage.saveSyncSettings(settings);
+
+            if (settings.enabled) {
+                startAutoSync();
+            }
+        });
+    }
+
+    if (syncNowBtn) {
+        syncNowBtn.addEventListener('click', () => {
+            syncFromGoogleCalendar(true);
+        });
+    }
+
+    if (addCalendarUrlBtn) {
+        addCalendarUrlBtn.addEventListener('click', addCalendarUrlDialog);
+    }
+
+    // start auto-sync if enabled
     if (settings.enabled) {
         startAutoSync();
     }
-    
+
+    // events list + initial calendar
     renderEventsList();
     loadMonthlyCalendar();
 };
+
 
 const renderDays = (days) => {
     const container = document.getElementById('days-container');
