@@ -14,14 +14,14 @@ A standalone web application to monitor your daily study time, plan your day, vi
 Simply open `index.html` in your web browser! That's it - no installation or setup required.
 
 ### Option 1: Direct File Opening
-1. Navigate to the `study-tracker-standalone` folder
+1. Navigate to the `study-planner` folder
 2. Double-click `index.html`
 3. The app will open in your default browser
 
 ### Option 2: Using a Local Server (Recommended)
 If you have Python installed:
 ```bash
-cd study-tracker-standalone
+cd study-planner
 python -m http.server 8000
 ```
 Then open `http://localhost:8000` in your browser.
